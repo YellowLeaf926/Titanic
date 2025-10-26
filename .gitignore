@@ -1,0 +1,5 @@
+# ignore fies
+src/python_app/data/
+src/R_app/data/
+titanic_venv/
+.DS_Store
