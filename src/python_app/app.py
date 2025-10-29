@@ -1,69 +1,85 @@
+# Run the model in src directory
+
+# Import necessary libraries
 import pandas as pd
-import numpy as np
-import sklearn
-import os
-from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.pipeline import Pipeline
+from sklearn.metrics import accuracy_score
 
-data_path_train = os.path.join(os.path.dirname(__file__), "..", "data", "train.csv")
-data_path_train = os.path.normpath(data_path_train)
+# Load Data
+# --------------------------------------------
+train = pd.read_csv("train.csv")
+print("Training data loaded successfully.")
 
-data_path_test = os.path.join(os.path.dirname(__file__), "..", "data", "test.csv")
-data_path_test = os.path.normpath(data_path_test)
+test = pd.read_csv("test.csv")
+print("Testing data loaded successfully.")
 
-train = pd.read_csv(data_path_train)
-print("Load Training Data")
-test = pd.read_csv(data_path_test)
-print("Load Testing Data")
+# Data Cleaning & Feature Engineering
+# --------------------------------------------
 
-# Q14. Explore, add, and adjust the data as you see fit. 
+# Impute missing Age values with median age grouped by Sex
 train['Age'] = train.groupby('Sex')['Age'].transform(lambda x: x.fillna(x.median()))
-print("Train Dataset Age Column (impute with median)", train['Age'])
+print("Train dataset: Missing 'Age' values imputed using group median by Sex.")
 
-# Q15. Build a logistic regression model to predict survivability on the training set using any features that you see fit.
+# Define features and target variable
 y_train = train['Survived']
 x_train = train[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare']]
 
-# Define categorical and numerical columns
+# Define categorical and numerical feature sets
 categorical_features = ['Sex']
 numerical_features = ['Pclass', 'Age', 'SibSp', 'Parch', 'Fare']
 
-# Preprocessing pipeline
+# Preprocessing and Model Building
+# --------------------------------------------
+
+# Preprocessing pipeline:
+# - Standardize numerical features
+# - One-hot encode categorical features
 preprocessor = ColumnTransformer(
     transformers=[
         ('num', StandardScaler(), numerical_features),
         ('cat', OneHotEncoder(handle_unknown='ignore'), categorical_features)
     ]
 )
+
+# Combine preprocessing and model into one pipeline
 clf = Pipeline(steps=[
     ('preprocessor', preprocessor),
     ('classifier', LogisticRegression(max_iter=1000))
 ])
-print(clf.fit(x_train, y_train))
 
-# Q16. Measure the accuracy of your model on the training set.
+# Fit logistic regression model
+clf.fit(x_train, y_train)
+print("Logistic regression model trained successfully.")
+
+# Model Evaluation on Training Data
+# --------------------------------------------
+
+# Predict on training set
 y_pred_train = clf.predict(x_train)
 train_accuracy = accuracy_score(y_train, y_pred_train)
-print("Train Dataset Accuracy: ", train_accuracy)
+print(f"Training Accuracy: {train_accuracy:.4f}")
 
-# Q17. Load `test.csv` and predict your model on the test set.
-gender_submission = pd.read_csv(r"C:\Users\lpy20\Desktop\NU_MLDS\2025Fall\MLDS400-DataEngineering\HW3\titanic\gender_submission.csv")
-test = pd.read_csv(r"C:\Users\lpy20\Desktop\NU_MLDS\2025Fall\MLDS400-DataEngineering\HW3\titanic\test.csv")
-test = test.merge(gender_submission, on = "PassengerId", how = "left")
-print("Combined Test Dataset with Survival Data: ", test.head())
+# Test Data Preparation
+# --------------------------------------------
 
+# Impute missing Fare and Age values using medians
 test['Fare'] = test['Fare'].transform(lambda x: x.fillna(x.median()))
 test['Age'] = test.groupby('Sex')['Age'].transform(lambda x: x.fillna(x.median()))
-print("Test Dataset Fare Column (impute with median)", test['Fare'])
-print("Test Dataset Age Column (impute with median)", test['Age'])
+print("Test dataset: Missing 'Fare' and 'Age' values imputed using median(s).")
 
-# Q18. Measure the accuracy of your model on the test set.
+# Prepare test features
 x_test = test[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare']]
-y_test = test['Survived']
-y_pred_test = clf.predict(x_test)
-test_accuracy = accuracy_score(y_test, y_pred_test)
-print("Test Accuracy: ", test_accuracy)
+
+# Generate Predictions on Test Data
+# --------------------------------------------
+
+# Predict survivability on test dataset
+test["Pred_Survived"] = clf.predict(x_test)
+output_path = "py_predictions.csv"
+test[['PassengerId', 'Pred_Survived']].to_csv(output_path, index=False)
+
+print(f"Predictions saved to '{output_path}'.")
+print("Titanic model pipeline completed successfully.")
