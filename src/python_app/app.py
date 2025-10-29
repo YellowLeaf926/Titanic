@@ -80,7 +80,3 @@ test[['PassengerId', 'Pred_Survived']].to_csv("python_app/py_predictions.csv", i
 
 print("Predictions saved to python_app/py_predictions.csv.")
 print("Titanic model pipeline completed successfully.")
-
-# Run the code in src directory
-# docker build -t titanic-app -f python_app/Dockerfile .
-# docker run --rm -v ${PWD}:/workspace -w /workspace titanic-app python python_app/app.py
