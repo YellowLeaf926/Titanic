@@ -7,10 +7,11 @@ The goal of this project is to use logistic regression models to predict the Sur
 # Prerequisites
 Before running the project, ensure you have:
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/)
-- [Git](https://git-scm.com/)
+- [Git](https://git-scm.com/)     
 No manual package installation is needed — all dependencies are handled automatically within each Docker container.
 
 # Repository Structure
+```plaintext
 Titanic/
 ├── src/
 │   ├── python_app/
@@ -24,6 +25,7 @@ Titanic/
 ├── titanic_venv                     # Python Virtual Environment
 ├── .gitignore                       # files that are not displayed
 └── README.md                        # this file
+```
 
 # Step 1 - Clone Repository 
 ```bash
@@ -35,7 +37,15 @@ Download the data from https://www.kaggle.com/competitions/titanic/data. Three c
 Under your src folder, create a folder called data and put the three csv files into it.
 
 # Step 3 - Run the python container
-Run the code in src directory
+- If you want to use the virtual environment
+```bash
+.\titanic_venv\Scripts\activate
+cd src
+docker build -t titanic-app -f python_app/Dockerfile .
+docker run --rm -v ${PWD}:/workspace -w /workspace titanic-app python python_app/app.py
+deactivate
+```
+- Otherwise
 ```bash
 cd src
 docker build -t titanic-app -f python_app/Dockerfile .
@@ -69,5 +79,5 @@ R predictions: src/R_app/R_predictions.csv
 You can open these files in any CSV viewer or load them back into R/Python for further analysis or comparison.
 
 # Note on Model Design
-Both models use logistic regression trained on: Pclass, Sex, Age, SibSp, Parch, Fare
+Both the Python and R implementations use logistic regression trained on the following passenger features: Pclass, Sex, Age, SibSp, Parch, Fare.    
 Missing values are filled with median.
