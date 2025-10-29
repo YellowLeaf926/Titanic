@@ -1,5 +1,6 @@
 # ignore fies
-src/python_app/data/
-src/R_app/data/
+src/python_app/py_predictions.csv
+src/R_app/R_predictions.csv
 titanic_venv/
+src/data/
 .DS_Store
