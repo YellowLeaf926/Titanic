@@ -73,11 +73,11 @@ This will:
 5. Save predictions to `src/R_app/R_predictions.csv`
 
 # Step 5 - Expected Outcome
-After successful runs:
-Python predictions: src/python_app/py_predictions.csv
-R predictions: src/R_app/R_predictions.csv
-You can open these files in any CSV viewer or load them back into R/Python for further analysis or comparison.
+- After successful runs:
+    1. Python predictions: src/python_app/py_predictions.csv
+    2. R predictions: src/R_app/R_predictions.csv
+- You can open these files in any CSV viewer or load them back into R/Python for further analysis or comparison.
 
 # Note on Model Design
-Both the Python and R implementations use logistic regression trained on the following passenger features: Pclass, Sex, Age, SibSp, Parch, Fare.    
-Missing values are filled with median.
+- Both the Python and R implementations use logistic regression trained on the following passenger features: Pclass, Sex, Age, SibSp, Parch, Fare.    
+- Missing values are filled with median.
