@@ -67,7 +67,3 @@ test$pred_survived <- predict(
 write_csv(test[, c("PassengerId", "pred_survived")], file = "R_app/R_predictions.csv")
 cat("Predictions saved to 'R_app/R_predictions.csv'.\n")
 cat("Titanic survival prediction pipeline completed successfully.\n")
-
-# run in src folder
-# docker build -t titanic-app-r -f R_app/Dockerfile .
-# docker run --rm -v ${PWD}:/workspace -w /workspace titanic-app-r Rscript R_app/app.R
