@@ -4,8 +4,8 @@ library(readr)
 
 # Load training and test datasets
 # -----------------------------
-train <- read_csv("train.csv")
-test <- read_csv("test.csv")
+train <- read_csv("data/train.csv")
+test <- read_csv("data/test.csv")
 
 # Data preprocessing: Impute missing values and scale features
 # -----------------------------
@@ -64,6 +64,10 @@ test$pred_survived <- predict(
 
 # Save results
 # -----------------------------
-write_csv(test[, c("PassengerId", "pred_survived")], file = "test_output.csv")
-cat("Predictions saved to 'test_output.csv'.\n")
+write_csv(test[, c("PassengerId", "pred_survived")], file = "R_app/R_predictions.csv")
+cat("Predictions saved to 'R_app/R_predictions.csv'.\n")
 cat("Titanic survival prediction pipeline completed successfully.\n")
+
+# run in src folder
+# docker build -t titanic-app-r -f R_app/Dockerfile .
+# docker run --rm -v ${PWD}:/workspace -w /workspace titanic-app-r Rscript R_app/app.R
