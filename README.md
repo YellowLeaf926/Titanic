@@ -33,19 +33,23 @@ git clone https://github.com/YellowLeaf926/Titanic.git
 cd Titanic
 ```
 # Step 2 - Load the data
-Download the data from https://www.kaggle.com/competitions/titanic/data. Three csv datasets are included: train, test, gender_submission.
-Under your src folder, create a folder called data and put the three csv files into it.
+- Visit the https://www.kaggle.com/competitions/titanic/data page on Kaggle. Click “Download All” to obtain the dataset as a .zip file. 
+- Unzip the downloaded file. You should see the following three CSV files:
+```bash
+train.csv
+test.csv
+gender_submission.csv
+```
+- Inside your project directory, under the src folder, create a folder called `data` (case sensitive) and put the three csv files into it. The final structure should look like:
+```plaintext
+src/
+  data/
+    train.csv
+    test.csv
+    gender_submission.csv
+```
 
 # Step 3 - Run the python container
-- If you want to use the virtual environment
-```bash
-.\titanic_venv\Scripts\activate
-cd src
-docker build -t titanic-app -f python_app/Dockerfile .
-docker run --rm -v ${PWD}:/workspace -w /workspace titanic-app python python_app/app.py
-deactivate
-```
-- Otherwise
 ```bash
 cd src
 docker build -t titanic-app -f python_app/Dockerfile .
